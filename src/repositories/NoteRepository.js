@@ -22,6 +22,10 @@ class NoteRepository {
         notes.push(newNote);
         return newNote;
     }
+
+    async deleteById(id) {
+        notes = notes.filter(n => n.id !== id);
+    }   
 }
 
 module.exports = new NoteRepository();

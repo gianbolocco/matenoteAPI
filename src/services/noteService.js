@@ -2,7 +2,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 const Note = require('../models/Note');
 const noteRepository = require('../repositories/NoteRepository');
-const { AppError, ValidationError } = require('../utils/customErrors'); // Assuming these exist, checked customErrors.js availability in previous steps
+const { AppError, ValidationError, NotFoundError } = require('../utils/customErrors'); // Assuming these exist, checked customErrors.js availability in previous steps
 
 class NoteService {
     async createNoteFromPdf(file, userId) {
@@ -140,6 +140,22 @@ class NoteService {
 
     async getAllNotes() {
         return noteRepository.findAll();
+    }
+
+    async getNoteById(id) {
+        const note = await noteRepository.findById(parseInt(id));
+        if (!note) {
+            throw new NotFoundError(`Note with ID ${id} not found`);
+        }
+        return note;
+    }
+
+    async deleteNote(id) {
+        const note = await noteRepository.findById(parseInt(id));
+        if (!note) {
+            throw new NotFoundError(`Note with ID ${id} not found`);
+        }
+        return noteRepository.deleteById(parseInt(id));
     }
 }
 

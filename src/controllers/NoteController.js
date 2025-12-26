@@ -42,8 +42,33 @@ const getAllNotes = async (req, res, next) => {
     }
 };
 
+const getNoteById = async (req, res, next) => {
+    try {
+        const note = await noteService.getNoteById(req.params.id);
+        res.status(200).json({
+            status: 'success',
+            data: { note }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteNote = async (req, res, next) => {
+    try {
+        await noteService.deleteNote(req.params.id);
+        res.status(204).json({
+            status: 'success'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createNoteFromPdf,
     createNoteFromYoutube,
-    getAllNotes
+    getAllNotes,
+    getNoteById,
+    deleteNote
 };

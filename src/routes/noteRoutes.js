@@ -23,7 +23,8 @@ const upload = multer({
     }
 });
 
-router.post('/', upload.single('pdf'), noteController.createNote);
+router.post('/', upload.single('pdf'), noteController.createNoteFromPdf);
+router.post('/youtube', noteController.createNoteFromYoutube);
 router.get('/', noteController.getAllNotes);
 
 module.exports = router;

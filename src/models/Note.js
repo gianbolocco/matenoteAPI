@@ -1,5 +1,5 @@
 class Note {
-    constructor(title, summary, sections, content, source, sourceType, userId) {
+    constructor(title, summary, sections, source, sourceType, userId) {
         this.id = null; // Set by repository
         this.title = title;
         this.summary = summary;

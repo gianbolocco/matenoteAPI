@@ -1,10 +1,24 @@
 const noteService = require('../services/noteService');
 const { ValidationError } = require('../utils/customErrors');
 
-const createNote = async (req, res, next) => {
+const createNoteFromPdf = async (req, res, next) => {
     try {
         // Delegate validation and processing to service
         const newNote = await noteService.createNoteFromPdf(req.file, req.body.userId);
+
+        res.status(201).json({
+            status: 'success',
+            data: { note: newNote }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const createNoteFromYoutube = async (req, res, next) => {
+    try {
+        const { link, userId } = req.body;
+        const newNote = await noteService.createNoteFromYoutube(link, userId);
 
         res.status(201).json({
             status: 'success',
@@ -29,6 +43,7 @@ const getAllNotes = async (req, res, next) => {
 };
 
 module.exports = {
-    createNote,
+    createNoteFromPdf,
+    createNoteFromYoutube,
     getAllNotes
 };

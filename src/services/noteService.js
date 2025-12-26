@@ -23,7 +23,7 @@ class NoteService {
             const formData = new FormData();
             formData.append('pdf', fileBuffer, originalName);
 
-            const webhookUrl = process.env.CREATE_NOTE_FROM_PDF_WEBHOOK_URL_TEST;
+            const webhookUrl = process.env.CREATE_NOTE_FROM_PDF_WEBHOOK_URL;
 
             const response = await axios.post(webhookUrl, formData, {
                 headers: {
@@ -35,34 +35,13 @@ class NoteService {
 
             // Validate response structure (basic check)
             if (!data.title || !data.summary || !data.sections) {
-                // If webhook fails to return expected structure, we might want to throw or handle gracefully.
-                // Assuming success path for now.
                 throw new AppError('Invalid response from processing service', 502);
             }
-
-            // Map response to Note model
-            // Note constructor: (title, summary, sections, content, source, sourceType, userId)
-            // The webhook returns 'title', 'summary', 'sections'.
-            // Source is the filename (originalName).
-            // SourceType is 'pdf'.
-            // Content is not explicitly returned by webhook as a single string, but 'sections' has content. 
-            // We'll leave 'content' field empty or derived if needed, but Model constructor had it. 
-            // Let's check Model definition again.
-            // Model: constructor(title, summary, sections, content, source, sourceType, userId)
-            // Wait, I put 'content' in the constructor in previous step? 
-            // Let me check my own previous tool call for Note.js.
-            // Yes: constructor(title, summary, sections, content, source, sourceType, userId)
-            // But user request JSON example didn't have a main 'content' field, just within sections.
-            // I'll pass null or empty string for 'content' parameter if it's not applicable, or maybe I made a mistake in Model.
-            // User request JSON: { title, summary, sections: [...] }
-            // I will assume specific 'content' field is strictly for the note's main text if not using sections, but here we have sections.
-            // I'll just pass null for content.
 
             const newNote = new Note(
                 data.title,
                 data.summary,
                 data.sections,
-                null, // content
                 originalName, // source
                 'pdf', // sourceType
                 parseInt(userId)
@@ -79,25 +58,83 @@ class NoteService {
 
             let errorMessage = error.message;
             if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.error('Webhook Error Response:', error.response.data);
-                console.error('Webhook Error Status:', error.response.status);
-                // Try to get a meaningful message from the response if possible, otherwise use status text
                 const remoteMsg = error.response.data ? (error.response.data.message || JSON.stringify(error.response.data)) : error.response.statusText;
                 errorMessage = `External service error ${error.response.status}: ${remoteMsg}`;
-                // We might want to pass the 500 status code from the external service to our client if it's a 500
-                // Or wrap it in a 502 Bad Gateway if it's an upstream error. 502 is semantically better for "upstream error".
                 throw new AppError(errorMessage, 502);
             } else if (error.request) {
-                // The request was made but no response was received
-                console.error('Webhook No Response:', error.request);
                 errorMessage = 'No response received from external service';
                 throw new AppError(errorMessage, 504); // Gateway Timeout
             }
 
             // Wrap other errors
             throw new AppError(`Failed to process note: ${errorMessage}`, 500);
+        }
+    }
+
+    async createNoteFromYoutube(link, userId) {
+        if (!link) {
+            throw new ValidationError('YouTube link is required');
+        }
+        if (!userId) {
+            throw new ValidationError('User ID is required');
+        }
+
+        // Regex to extract YouTube ID
+        // Handles:
+        // - https://www.youtube.com/watch?v=VIDEO_ID
+        // - https://youtu.be/VIDEO_ID
+        // - https://www.youtube.com/embed/VIDEO_ID
+        const videoIdMatch = link.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+
+        if (!videoIdMatch) {
+            throw new ValidationError('Invalid YouTube link');
+        }
+
+        const videoId = videoIdMatch[1];
+
+        try {
+            const webhookUrl = process.env.CREATE_NOTE_FROM_YOUTUBE_WEBHOOK_URL;
+
+            const response = await axios.post(webhookUrl, {
+                id: videoId
+            });
+
+            const data = response.data;
+
+            // Validate response structure
+            if (!data.title || !data.summary || !data.sections) {
+                throw new AppError('Invalid response from processing service', 502);
+            }
+
+            const newNote = new Note(
+                data.title,
+                data.summary,
+                data.sections,
+                link,
+                'youtube',
+                parseInt(userId)
+            );
+
+            // Save to repository
+            const savedNote = await noteRepository.create(newNote);
+            return savedNote;
+
+        } catch (error) {
+            if (error instanceof ValidationError || error instanceof AppError) {
+                throw error;
+            }
+
+            let errorMessage = error.message;
+            if (error.response) {
+                const remoteMsg = error.response.data ? (error.response.data.message || JSON.stringify(error.response.data)) : error.response.statusText;
+                errorMessage = `External service error ${error.response.status}: ${remoteMsg}`;
+                throw new AppError(errorMessage, 502);
+            } else if (error.request) {
+                errorMessage = 'No response received from external service';
+                throw new AppError(errorMessage, 504);
+            }
+
+            throw new AppError(`Failed to process YouTube note: ${errorMessage}`, 500);
         }
     }
 

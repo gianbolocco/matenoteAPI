@@ -38,14 +38,14 @@ class NoteService {
                 throw new AppError('Invalid response from processing service', 502);
             }
 
-            const newNote = new Note(
-                data.title,
-                data.summary,
-                data.sections,
-                originalName, // source
-                'pdf', // sourceType
-                parseInt(userId)
-            );
+            const newNote = {
+                title: data.title,
+                summary: data.summary,
+                sections: data.sections,
+                source: originalName,
+                sourceType: 'pdf',
+                userId: userId // Assuming userId is passed as ObjectId string or compatible
+            };
 
             // Save to repository
             const savedNote = await noteRepository.create(newNote);
@@ -106,14 +106,14 @@ class NoteService {
                 throw new AppError('Invalid response from processing service', 502);
             }
 
-            const newNote = new Note(
-                data.title,
-                data.summary,
-                data.sections,
-                link,
-                'youtube',
-                parseInt(userId)
-            );
+            const newNote = {
+                title: data.title,
+                summary: data.summary,
+                sections: data.sections,
+                source: link,
+                sourceType: 'youtube',
+                userId: userId
+            };
 
             // Save to repository
             const savedNote = await noteRepository.create(newNote);
@@ -143,7 +143,7 @@ class NoteService {
     }
 
     async getNoteById(id) {
-        const note = await noteRepository.findById(parseInt(id));
+        const note = await noteRepository.findById(id);
         if (!note) {
             throw new NotFoundError(`Note with ID ${id} not found`);
         }
@@ -151,11 +151,11 @@ class NoteService {
     }
 
     async deleteNote(id) {
-        const note = await noteRepository.findById(parseInt(id));
+        const note = await noteRepository.findById(id);
         if (!note) {
             throw new NotFoundError(`Note with ID ${id} not found`);
         }
-        return noteRepository.deleteById(parseInt(id));
+        return noteRepository.deleteById(id);
     }
 }
 

@@ -19,7 +19,7 @@ class UserService {
         if (!name || !email) {
             throw new ValidationError('Name and email are required');
         }
-        return await userRepository.create({ name, email });
+        return await userRepository.create(userData);
     }
 
     async updateUser(id, userData) {

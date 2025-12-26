@@ -1,4 +1,11 @@
 const errorHandler = (err, req, res, next) => {
+  if (err.name === 'CastError') {
+    return res.status(400).json({
+      status: 'fail',
+      message: `Invalid ID format: ${err.value}`
+    });
+  }
+
   const statusCode = err.statusCode || 500;
   const status = err.status || 'error';
 

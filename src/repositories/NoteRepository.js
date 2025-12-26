@@ -1,31 +1,27 @@
 const Note = require('../models/Note');
 
-let notes = [];
-let nextId = 1;
-
 class NoteRepository {
     async findAll() {
-        return notes;
+        return await Note.find({});
     }
 
     async findById(id) {
-        return notes.find(n => n.id === id);
+        return await Note.findById(id);
     }
 
     async findByUserId(userId) {
-        return notes.filter(n => n.userId === userId);
+        return await Note.find({ userId: userId });
     }
 
     async create(noteData) {
-        const newNote = noteData;
-        newNote.id = nextId++;
-        notes.push(newNote);
-        return newNote;
+        // noteData should match the schema
+        const newNote = new Note(noteData);
+        return await newNote.save();
     }
 
     async deleteById(id) {
-        notes = notes.filter(n => n.id !== id);
-    }   
+        return await Note.findByIdAndDelete(id);
+    }
 }
 
 module.exports = new NoteRepository();

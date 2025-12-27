@@ -20,7 +20,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/health', healthRoutes);
 app.use('/users', userRoutes);
 const noteRoutes = require('./routes/noteRoutes');
+const flashcardRoutes = require('./routes/flashcardRoutes');
+const quizRoutes = require('./routes/quizRoutes');
+
 app.use('/notes', noteRoutes);
+app.use('/flashcards', flashcardRoutes);
+app.use('/quizzes', quizRoutes);
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'Welcome to the API' });
 });

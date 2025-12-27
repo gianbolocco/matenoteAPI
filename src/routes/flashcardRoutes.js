@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const flashcardController = require('../controllers/FlashcardController');
+
+router.post('/', flashcardController.createFlashcard);
+router.get('/note/:noteId', flashcardController.getFlashcardsByNoteId);
+router.get('/:id', flashcardController.getFlashcardById);
+router.delete('/:id', flashcardController.deleteFlashcard);
+
+module.exports = router;

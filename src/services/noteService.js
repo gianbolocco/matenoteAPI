@@ -138,8 +138,8 @@ class NoteService {
         }
     }
 
-    async getAllNotes() {
-        return noteRepository.findAll();
+    async getAllNotes(query) {
+        return noteRepository.findAll(query);
     }
 
     async getNoteById(id) {

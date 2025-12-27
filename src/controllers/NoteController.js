@@ -31,7 +31,7 @@ const createNoteFromYoutube = async (req, res, next) => {
 
 const getAllNotes = async (req, res, next) => {
     try {
-        const notes = await noteService.getAllNotes();
+        const notes = await noteService.getAllNotes(req.query);
         res.status(200).json({
             status: 'success',
             results: notes.length,

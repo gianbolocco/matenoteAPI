@@ -11,7 +11,8 @@ const noteSchema = new mongoose.Schema({
     sections: [{
         subtitle: String,
         content: String,
-        highlights: [String]
+        highlights: [String],
+        _id: false
     }],
     source: {
         type: String,

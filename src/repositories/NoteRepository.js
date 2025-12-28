@@ -2,7 +2,7 @@ const Note = require('../models/Note');
 
 class NoteRepository {
     async findAll(query) {
-        const { limit = 100, page = 1, userId, keyword } = query;
+        const { limit = 100, page = 1, userId, keyword, sourceType } = query;
         const skip = (page - 1) * limit;
 
         const filter = {};
@@ -12,8 +12,11 @@ class NoteRepository {
         if (keyword) {
             filter.title = { $regex: keyword, $options: 'i' };
         }
+        if (sourceType) {
+            filter.sourceType = sourceType;
+        }
 
-        const notes = await Note.find(filter).skip(skip).limit(limit);
+        const notes = await Note.find(filter).sort({ createDate: -1 }).skip(skip).limit(limit);
         return notes;
     }
 
@@ -22,7 +25,7 @@ class NoteRepository {
     }
 
     async findByUserId(userId) {
-        return await Note.find({ userId: userId });
+        return await Note.find({ userId: userId }).sort({ createDate: -1 });
     }
 
     async create(noteData) {

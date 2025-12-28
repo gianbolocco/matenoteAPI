@@ -166,6 +166,12 @@
  *         schema:
  *           type: string
  *         description: Search by title keyword
+      - in: query
+        name: sourceType
+        schema:
+          type: string
+          enum: [pdf, youtube]
+        description: Filter by source type (pdf, youtube)
  *     responses:
  *       200:
  *         description: List of all notes

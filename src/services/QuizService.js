@@ -16,14 +16,8 @@ class QuizService {
         }
 
         // 1. Fetch Note
-        const note = await noteService.getNoteById(noteId);
+        let noteContent = await noteService.getNoteContentById(noteId);
 
-        let noteContent = `Title: ${note.title}\n\nSummary: ${note.summary}\n\n`;
-        if (note.sections && Array.isArray(note.sections)) {
-            note.sections.forEach(section => {
-                noteContent += `Section: ${section.subtitle}\n${section.content}\n\n`;
-            });
-        }
 
         // 2. Call Webhook
         try {

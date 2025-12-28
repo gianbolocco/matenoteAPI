@@ -1,6 +1,5 @@
 const axios = require('axios');
 const FormData = require('form-data');
-const Note = require('../models/Note');
 const noteRepository = require('../repositories/NoteRepository');
 const { AppError, ValidationError, NotFoundError } = require('../utils/customErrors'); // Assuming these exist, checked customErrors.js availability in previous steps
 
@@ -164,6 +163,21 @@ class NoteService {
 
         return noteRepository.deleteById(id);
     }
+
+    async getNoteContentById(id) {
+        const note = await noteRepository.findById(id);
+        if (!note) {
+            throw new NotFoundError(`Note with ID ${id} not found`);
+        }
+        let noteContent = `Title: ${note.title}\n\nSummary: ${note.summary}\n\n`;
+        if (note.sections && Array.isArray(note.sections)) {
+            note.sections.forEach(section => {
+                noteContent += `Section: ${section.subtitle}\n${section.content}\n\n`;
+            });
+        }
+        return noteContent;
+    }
+
 }
 
 module.exports = new NoteService();

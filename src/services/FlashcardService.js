@@ -15,18 +15,8 @@ class FlashcardService {
             throw new ValidationError('Difficulty must be 1, 2, or 3');
         }
 
-        // 1. Fetch Note
-        const note = await noteService.getNoteById(noteId);
+        const noteContent = await noteService.getNoteContentById(noteId);
 
-        // 2. Prepare Unified Text
-        let noteContent = `Title: ${note.title}\n\nSummary: ${note.summary}\n\n`;
-        if (note.sections && Array.isArray(note.sections)) {
-            note.sections.forEach(section => {
-                noteContent += `Section: ${section.subtitle}\n${section.content}\n\n`;
-            });
-        }
-
-        // 3. Call Webhook
         try {
             const response = await axios.post(process.env.CREATE_FLASHCARD_WEBHOOK_URL, {
                 data: noteContent,
@@ -36,7 +26,6 @@ class FlashcardService {
 
             const generatedFlashcards = response.data.flashcards;
 
-            // 3. Save Flashcard Set
             const flashcardData = {
                 noteId: noteId,
                 quantity: quantity,

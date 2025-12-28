@@ -155,6 +155,13 @@ class NoteService {
         if (!note) {
             throw new NotFoundError(`Note with ID ${id} not found`);
         }
+
+        // Delete associated flashcards and quizzes
+        const flashcardService = require('./FlashcardService');
+        const quizService = require('./QuizService');
+        await flashcardService.deleteFlashcardsByNoteId(id);
+        await quizService.deleteQuizzesByNoteId(id);
+
         return noteRepository.deleteById(id);
     }
 }

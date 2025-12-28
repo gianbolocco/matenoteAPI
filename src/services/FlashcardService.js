@@ -17,9 +17,6 @@ class FlashcardService {
 
         // 1. Fetch Note
         const note = await noteService.getNoteById(noteId);
-        if (!note) {
-            throw new Error('Note not found');
-        }
 
         // 2. Prepare Unified Text
         let noteContent = `Title: ${note.title}\n\nSummary: ${note.summary}\n\n`;
@@ -73,6 +70,10 @@ class FlashcardService {
             throw new Error('Flashcard not found');
         }
         return { message: 'Flashcard deleted successfully' };
+    }
+
+    async deleteFlashcardsByNoteId(noteId) {
+        return await flashcardRepository.deleteByNoteId(noteId);
     }
 }
 

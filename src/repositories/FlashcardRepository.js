@@ -17,6 +17,10 @@ class FlashcardRepository {
     async deleteById(id) {
         return await Flashcard.findByIdAndDelete(id);
     }
+
+    async deleteByNoteId(noteId) {
+        return await Flashcard.deleteMany({ noteId: noteId });
+    }
 }
 
 module.exports = new FlashcardRepository();

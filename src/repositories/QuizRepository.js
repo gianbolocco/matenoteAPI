@@ -17,6 +17,10 @@ class QuizRepository {
     async deleteById(id) {
         return await Quiz.findByIdAndDelete(id);
     }
+
+    async deleteByNoteId(noteId) {
+        return await Quiz.deleteMany({ noteId: noteId });
+    }
 }
 
 module.exports = new QuizRepository();

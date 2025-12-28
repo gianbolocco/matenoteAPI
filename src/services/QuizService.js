@@ -17,9 +17,6 @@ class QuizService {
 
         // 1. Fetch Note
         const note = await noteService.getNoteById(noteId);
-        if (!note) {
-            throw new Error('Note not found');
-        }
 
         let noteContent = `Title: ${note.title}\n\nSummary: ${note.summary}\n\n`;
         if (note.sections && Array.isArray(note.sections)) {
@@ -72,6 +69,9 @@ class QuizService {
             throw new Error('Quiz not found');
         }
         return { message: 'Quiz deleted successfully' };
+    }
+    async deleteQuizzesByNoteId(noteId) {
+        return await quizRepository.deleteByNoteId(noteId);
     }
 }
 

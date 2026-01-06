@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-        required: true
+        required: false
     },
     phoneNumber: {
         type: String
@@ -19,7 +19,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: false
+    },
+    provider: {
+        type: String,
+        default: 'local'
     }
 });
 

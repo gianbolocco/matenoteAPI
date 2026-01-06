@@ -2,6 +2,9 @@ const axios = require('axios');
 const FormData = require('form-data');
 const noteRepository = require('../repositories/NoteRepository');
 const { AppError, ValidationError, NotFoundError } = require('../utils/customErrors'); // Assuming these exist, checked customErrors.js availability in previous steps
+const flashcardService = require('./FlashcardService');
+const quizService = require('./QuizService');
+const chatService = require('./ChatService');
 
 class NoteService {
     async createNoteFromPdf(file, userId) {
@@ -156,10 +159,10 @@ class NoteService {
         }
 
         // Delete associated flashcards and quizzes
-        const flashcardService = require('./FlashcardService');
-        const quizService = require('./QuizService');
+
         await flashcardService.deleteFlashcardsByNoteId(id);
         await quizService.deleteQuizzesByNoteId(id);
+        await chatService.deleteChatsByNoteId(id);
 
         return noteRepository.deleteById(id);
     }

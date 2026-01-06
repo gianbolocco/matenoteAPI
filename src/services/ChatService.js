@@ -35,6 +35,10 @@ class ChatService {
         return await chatRepository.getChatHistory(noteId, userId);
     }
 
+    async deleteChatsByNoteId(noteId) {
+        return await chatRepository.deleteChatsByNoteId(noteId);
+    }
+
 }
 
 module.exports = new ChatService();

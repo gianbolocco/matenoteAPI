@@ -53,6 +53,10 @@ class ChatRepository {
         const chat = await this.findByNoteAndUserId(noteId, userId);
         return chat ? chat.messages : [];
     }
+
+    async deleteChatsByNoteId(noteId) {
+        return await Chat.deleteMany({ noteId: noteId });
+    }
 }
 
 module.exports = new ChatRepository();

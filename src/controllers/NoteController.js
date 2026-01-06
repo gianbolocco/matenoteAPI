@@ -1,4 +1,7 @@
 const noteService = require('../services/noteService');
+const flashcardService = require('../services/FlashcardService');
+const quizService = require('../services/QuizService');
+const chatService = require('../services/ChatService');
 
 const { ValidationError } = require('../utils/customErrors');
 
@@ -57,7 +60,11 @@ const getNoteById = async (req, res, next) => {
 
 const deleteNote = async (req, res, next) => {
     try {
-        await noteService.deleteNote(req.params.id);
+        const noteId = req.params.id;
+        await chatService.deleteChatsByNoteId(noteId);
+        await noteService.deleteNote(noteId);
+        await flashcardService.deleteFlashcardsByNoteId(noteId);
+        await quizService.deleteQuizzesByNoteId(noteId);
         res.status(204).json({
             status: 'success'
         });

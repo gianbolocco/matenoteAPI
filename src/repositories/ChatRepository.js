@@ -19,13 +19,11 @@ class ChatRepository {
         chat.messages.push({
             role: 'user',
             content: userMessage,
-            timestamp: new Date()
         });
 
         chat.messages.push({
             role: 'assistant',
             content: assistantMessage,
-            timestamp: new Date()
         });
 
         return await chat.save();

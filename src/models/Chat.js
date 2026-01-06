@@ -9,7 +9,6 @@ const chat = new mongoose.Schema({
             required: true
         },
         content: String,
-        timestamp: Date,
         _id: false
     }],
     noteId: {

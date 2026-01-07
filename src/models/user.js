@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     provider: {
         type: String,
         default: 'local'
+    },
+    createDate: {
+        type: Date,
+        default: Date.now
     }
 });
 

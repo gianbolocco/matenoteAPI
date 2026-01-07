@@ -1,31 +1,42 @@
 const Note = require('../models/Note');
 
-let notes = [];
-let nextId = 1;
-
 class NoteRepository {
-    async findAll() {
+    async findAll(query) {
+        const { limit = 100, page = 1, userId, keyword, sourceType } = query;
+        const skip = (page - 1) * limit;
+
+        const filter = {};
+        if (userId) {
+            filter.userId = userId;
+        }
+        if (keyword) {
+            filter.title = { $regex: keyword, $options: 'i' };
+        }
+        if (sourceType) {
+            filter.sourceType = sourceType;
+        }
+
+        const notes = await Note.find(filter).sort({ createDate: -1 }).skip(skip).limit(limit);
         return notes;
     }
 
     async findById(id) {
-        return notes.find(n => n.id === id);
+        return await Note.findById(id);
     }
 
     async findByUserId(userId) {
-        return notes.filter(n => n.userId === userId);
+        return await Note.find({ userId: userId }).sort({ createDate: -1 });
     }
 
     async create(noteData) {
-        const newNote = noteData;
-        newNote.id = nextId++;
-        notes.push(newNote);
-        return newNote;
+        // noteData should match the schema
+        const newNote = new Note(noteData);
+        return await newNote.save();
     }
 
     async deleteById(id) {
-        notes = notes.filter(n => n.id !== id);
-    }   
+        return await Note.findByIdAndDelete(id);
+    }
 }
 
 module.exports = new NoteRepository();

@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const noteController = require('../controllers/NoteController');
+const chatController = require('../controllers/ChatController');
 
 const router = express.Router();
 
@@ -28,5 +29,8 @@ router.post('/youtube', noteController.createNoteFromYoutube);
 router.get('/', noteController.getAllNotes);
 router.get('/:id', noteController.getNoteById);
 router.delete('/:id', noteController.deleteNote);
+
+router.post('/:id/chat', chatController.chatWithNote)
+router.get('/:id/chat', chatController.getChatHistory)
 
 module.exports = router;

@@ -7,11 +7,11 @@
  *       required:
  *         - name
  *         - email
- *         - phoneNumber
+ *         - password
  *         - lastName
  *       properties:
  *         id:
- *           type: integer
+ *           type: string
  *           description: The auto-generated id of the user
  *         name:
  *           type: string
@@ -19,6 +19,9 @@
  *         email:
  *           type: string
  *           description: The user email
+ *         password:
+ *           type: string
+ *           description: The user password
  *         phoneNumber:
  *           type: string
  *           description: The user phone number
@@ -28,6 +31,7 @@
  *       example:
  *         name: John
  *         email: john@example.com
+ *         password: password123
  *         phoneNumber: 123456789
  *         lastName: Doe
  */
@@ -66,7 +70,7 @@
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The user id
  *     responses:
@@ -113,7 +117,7 @@
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The user id
  *     requestBody:
@@ -143,7 +147,7 @@
  *       - in: path
  *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
  *         description: The user id
  *     responses:

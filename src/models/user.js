@@ -29,6 +29,26 @@ const userSchema = new mongoose.Schema({
     createDate: {
         type: Date,
         default: Date.now
+    },
+    interests: {
+        type: [String],
+        required: false
+    },
+    country: {
+        type: String,
+        required: false
+    },
+    occupation: {
+        type: String,
+        required: false
+    },
+    age: {
+        type: Number,
+        required: false
+    },
+    usagePurpose: {
+        type: String,
+        required: false
     }
 });
 

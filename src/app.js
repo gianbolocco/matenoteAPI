@@ -32,10 +32,13 @@ app.use('/users', userRoutes);
 const noteRoutes = require('./routes/noteRoutes');
 const flashcardRoutes = require('./routes/flashcardRoutes');
 const quizRoutes = require('./routes/quizRoutes');
+const folderRoutes = require('./routes/FolderRoutes');
 
 app.use('/notes', noteRoutes);
 app.use('/flashcards', flashcardRoutes);
 app.use('/quizzes', quizRoutes);
+app.use('/', folderRoutes); // Mounts at root to match /users/:userId/folders and /folders/:id
+
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'Welcome to the API' });
 });

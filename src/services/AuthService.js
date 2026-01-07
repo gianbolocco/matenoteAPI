@@ -1,19 +1,21 @@
 const jwt = require("jsonwebtoken");
-const UserRepository = require("../repositories/userRepository");
+const UserService = require("../services/userService");
 
 class AuthService {
     static async loginWithGoogle(profile) {
         const email = profile.emails[0].value;
         const name = profile.displayName;
 
-        let user = await UserRepository.findByEmail(email);
-
+        let user = await UserService.findByEmail(email);
+        
         if (!user) {
-            user = await UserRepository.create({
+            user = await UserService.createUser({
                 email,
                 name,
+                avatar: profile.photos[0].value,
                 lastName: profile.name?.familyName || 'Unknown', // Handle lastName requirement if needed
                 provider: "google",
+                plan: "Free",
             });
         }
 

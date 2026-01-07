@@ -9,17 +9,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    phoneNumber: {
-        type: String
-    },
     email: {
         type: String,
         required: true,
         unique: true
     },
-    password: {
+    avatar: {
         type: String,
         required: false
+    },
+    plan: {
+        type: String,
+        default: 'Free'
     },
     provider: {
         type: String,

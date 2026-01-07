@@ -1,7 +1,7 @@
 const quizRepository = require('../repositories/QuizRepository');
 const noteService = require('../services/noteService');
 const axios = require('axios');
-const { ValidationError } = require('../utils/customErrors');
+const { ValidationError, NotFoundError } = require('../utils/customErrors');
 
 class QuizService {
     async createQuiz(data) {
@@ -52,7 +52,7 @@ class QuizService {
     async getQuizById(id) {
         const quiz = await quizRepository.findById(id);
         if (!quiz) {
-            throw new Error('Quiz not found');
+            throw new NotFoundError('Quiz not found');
         }
         return quiz;
     }
@@ -60,7 +60,7 @@ class QuizService {
     async deleteQuiz(id) {
         const deleted = await quizRepository.deleteById(id);
         if (!deleted) {
-            throw new Error('Quiz not found');
+            throw new NotFoundError('Quiz not found');
         }
         return { message: 'Quiz deleted successfully' };
     }

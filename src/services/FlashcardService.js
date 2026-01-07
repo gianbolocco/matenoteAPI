@@ -1,7 +1,7 @@
 const flashcardRepository = require('../repositories/FlashcardRepository');
 const noteService = require('../services/noteService');
 const axios = require('axios');
-const { ValidationError } = require('../utils/customErrors');
+const { ValidationError, NotFoundError } = require('../utils/customErrors');
 
 class FlashcardService {
     async createFlashcard(data) {
@@ -56,7 +56,7 @@ class FlashcardService {
     async deleteFlashcard(id) {
         const deleted = await flashcardRepository.deleteById(id);
         if (!deleted) {
-            throw new Error('Flashcard not found');
+            throw new NotFoundError('Flashcard not found');
         }
         return { message: 'Flashcard deleted successfully' };
     }

@@ -15,10 +15,6 @@ class UserService {
     }
 
     async createUser(userData) {
-        const { name, email } = userData;
-        if (!name || !email) {
-            throw new ValidationError('Name and email are required');
-        }
         return await userRepository.create(userData);
     }
 
@@ -37,6 +33,10 @@ class UserService {
         }
         return { message: 'User deleted successfully' };
     }
+
+    async findByEmail(email) {
+        return await userRepository.findByEmail(email);
+    }   
 }
 
 module.exports = new UserService();

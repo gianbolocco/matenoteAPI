@@ -1,4 +1,4 @@
-const noteService = require('../services/noteService');
+const noteService = require('../services/NoteService');
 const flashcardService = require('../services/FlashcardService');
 const quizService = require('../services/QuizService');
 const chatService = require('../services/ChatService');

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const UserRepository = require("../repositories/userRepository");
+const UserRepository = require("../repositories/UserRepository");
 
 const authMiddleware = async (req, res, next) => {
     try {

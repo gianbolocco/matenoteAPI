@@ -1,5 +1,5 @@
 const folderRepository = require('../repositories/FolderRepository');
-const { NotFoundError } = require('../utils/customErrors');
+const { NotFoundError } = require('../utils/CustomErrors');
 
 class FolderService {
 
@@ -37,7 +37,7 @@ class FolderService {
 
     async deleteNoteFromFolders(noteId) {
         return await folderRepository.deleteNoteFromFolders(noteId);
-    }   
+    }
 
     async addNoteToFolder(folderId, notesIds) {
         const folder = await this.getFolderById(folderId);

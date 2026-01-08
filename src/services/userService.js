@@ -1,5 +1,5 @@
 const userRepository = require('../repositories/UserRepository');
-const { NotFoundError, ValidationError } = require('../utils/customErrors');
+const { NotFoundError, ValidationError } = require('../utils/CustomErrors');
 
 class UserService {
     async getAllUsers() {
@@ -36,7 +36,7 @@ class UserService {
 
     async findByEmail(email) {
         return await userRepository.findByEmail(email);
-    }   
+    }
 }
 
 module.exports = new UserService();

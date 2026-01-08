@@ -1,6 +1,6 @@
 const chatRepository = require('../repositories/ChatRepository');
 const axios = require('axios');
-const noteService = require('./noteService');
+const noteService = require('./NoteService');
 
 class ChatService {
     async chatWithNote(message, noteId, userId) {

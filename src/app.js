@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-require('./strategies/google.strategy'); // Register strategy
-const errorHandler = require('./middleware/errorHandler');
+require('./strategies/GoogleStrategy'); // Register strategy
+const errorHandler = require('./middleware/ErrorHandler');
 const healthRoutes = require('./routes/HealthRoutes');
 const userRoutes = require('./routes/UserRoutes');
 const authRoutes = require('./routes/AuthRoutes');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./config/swagger');
+const swaggerSpecs = require('./config/Swagger');
 
 const app = express();
 

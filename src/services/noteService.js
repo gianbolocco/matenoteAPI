@@ -1,7 +1,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const noteRepository = require('../repositories/NoteRepository');
-const { AppError, ValidationError, NotFoundError } = require('../utils/customErrors'); // Assuming these exist, checked customErrors.js availability in previous steps
+const { AppError, ValidationError, NotFoundError } = require('../utils/CustomErrors'); // Assuming these exist, checked CustomErrors.js availability in previous steps
 
 
 class NoteService {

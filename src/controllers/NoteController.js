@@ -4,7 +4,7 @@ const quizService = require('../services/QuizService');
 const chatService = require('../services/ChatService');
 const folderService = require('../services/FolderService');
 
-const { ValidationError } = require('../utils/customErrors');
+const { ValidationError } = require('../utils/CustomErrors');
 
 const createNoteFromPdf = async (req, res, next) => {
     try {

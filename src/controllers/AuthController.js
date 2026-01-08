@@ -1,4 +1,4 @@
-const { AuthService } = require("../services/AuthService.js");
+const { AuthService } = require("../services/authService.js");
 
 const googleCallback = async (req, res, next) => {
     try {

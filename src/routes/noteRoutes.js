@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
-const noteController = require('../controllers/NoteController');
-const chatController = require('../controllers/ChatController');
+const noteController = require('../controllers/noteController');
+const chatController = require('../controllers/chatController');
 
 const router = express.Router();
 

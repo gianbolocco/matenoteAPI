@@ -1,7 +1,7 @@
-const flashcardRepository = require('../repositories/FlashcardRepository');
-const noteService = require('../services/NoteService');
+const flashcardRepository = require('../repositories/flashcardRepository');
+const noteService = require('../services/noteService');
 const axios = require('axios');
-const { ValidationError, NotFoundError } = require('../utils/CustomErrors');
+const { ValidationError, NotFoundError } = require('../utils/customErrors');
 
 class FlashcardService {
     async createFlashcard(data) {

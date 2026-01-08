@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const UserService = require("./UserService");
+const UserService = require("./userService");
 
 class AuthService {
     static async loginWithGoogle(profile) {

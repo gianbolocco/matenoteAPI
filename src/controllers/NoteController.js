@@ -1,10 +1,10 @@
-const noteService = require('../services/NoteService');
-const flashcardService = require('../services/FlashcardService');
-const quizService = require('../services/QuizService');
-const chatService = require('../services/ChatService');
-const folderService = require('../services/FolderService');
+const noteService = require('../services/noteService');
+const flashcardService = require('../services/flashcardService');
+const quizService = require('../services/quizService');
+const chatService = require('../services/chatService');
+const folderService = require('../services/folderService');
 
-const { ValidationError } = require('../utils/CustomErrors');
+const { ValidationError } = require('../utils/customErrors');
 
 const createNoteFromPdf = async (req, res, next) => {
     try {

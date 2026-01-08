@@ -1,5 +1,5 @@
-const userRepository = require('../repositories/UserRepository');
-const { NotFoundError, ValidationError } = require('../utils/CustomErrors');
+const userRepository = require('../repositories/userRepository');
+const { NotFoundError, ValidationError } = require('../utils/customErrors');
 
 class UserService {
     async getAllUsers() {

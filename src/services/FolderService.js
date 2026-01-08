@@ -1,5 +1,5 @@
-const folderRepository = require('../repositories/FolderRepository');
-const { NotFoundError } = require('../utils/CustomErrors');
+const folderRepository = require('../repositories/folderRepository');
+const { NotFoundError } = require('../utils/customErrors');
 
 class FolderService {
 

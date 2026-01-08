@@ -1,4 +1,4 @@
-const flashcardService = require('../services/FlashcardService');
+const flashcardService = require('../services/flashcardService');
 
 const createFlashcard = async (req, res, next) => {
     try {

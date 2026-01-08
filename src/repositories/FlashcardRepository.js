@@ -1,4 +1,4 @@
-const Flashcard = require('../models/Flashcard');
+const Flashcard = require('../models/flashcard');
 
 class FlashcardRepository {
     async create(flashcardData) {

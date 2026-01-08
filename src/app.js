@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-require('./strategies/GoogleStrategy'); // Register strategy
-const errorHandler = require('./middleware/ErrorHandler');
-const healthRoutes = require('./routes/HealthRoutes');
-const userRoutes = require('./routes/UserRoutes');
-const authRoutes = require('./routes/AuthRoutes');
+require('./strategies/googleStrategy'); // Register strategy
+const errorHandler = require('./middleware/errorHandler');
+const healthRoutes = require('./routes/healthRoutes');
+const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./config/Swagger');
+const swaggerSpecs = require('./config/swagger');
 
 const app = express();
 
@@ -29,10 +29,10 @@ app.use(passport.initialize());
 app.use('/auth', authRoutes);
 app.use('/health', healthRoutes);
 app.use('/users', userRoutes);
-const noteRoutes = require('./routes/NoteRoutes');
-const flashcardRoutes = require('./routes/FlashcardRoutes');
-const quizRoutes = require('./routes/QuizRoutes');
-const folderRoutes = require('./routes/FolderRoutes');
+const noteRoutes = require('./routes/noteRoutes');
+const flashcardRoutes = require('./routes/flashcardRoutes');
+const quizRoutes = require('./routes/quizRoutes');
+const folderRoutes = require('./routes/folderRoutes');
 
 app.use('/notes', noteRoutes);
 app.use('/flashcards', flashcardRoutes);

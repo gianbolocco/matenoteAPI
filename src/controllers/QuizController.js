@@ -1,4 +1,4 @@
-const quizService = require('../services/QuizService');
+const quizService = require('../services/quizService');
 
 const createQuiz = async (req, res, next) => {
     try {

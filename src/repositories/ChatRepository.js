@@ -1,4 +1,4 @@
-const Chat = require('../models/Chat');
+const Chat = require('../models/chat');
 
 class ChatRepository {
     async findByNoteAndUserId(noteId, userId) {

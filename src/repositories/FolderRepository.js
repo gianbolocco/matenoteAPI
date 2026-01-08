@@ -1,4 +1,4 @@
-const Folder = require('../models/Folder');
+const Folder = require('../models/folder');
 
 class FolderRepository {
     async create(folderData) {

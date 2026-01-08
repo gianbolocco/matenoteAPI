@@ -1,4 +1,4 @@
-const folderService = require('../services/FolderService.js');
+const folderService = require('../services/folderService.js');
 
 const createFolder = async (req, res, next) => {
     try {

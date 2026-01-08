@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const passport = require("passport");
-const { googleCallback, getSession, logout } = require("../controllers/AuthController.js");
+const { googleCallback, getSession, logout } = require("../controllers/authController.js");
 const authMiddleware = require("../middleware/authMiddleware.js");
 
 const router = Router();

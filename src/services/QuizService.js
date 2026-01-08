@@ -1,7 +1,7 @@
-const quizRepository = require('../repositories/QuizRepository');
-const noteService = require('../services/NoteService');
+const quizRepository = require('../repositories/quizRepository');
+const noteService = require('../services/noteService');
 const axios = require('axios');
-const { ValidationError, NotFoundError } = require('../utils/CustomErrors');
+const { ValidationError, NotFoundError } = require('../utils/customErrors');
 
 class QuizService {
     async createQuiz(data) {

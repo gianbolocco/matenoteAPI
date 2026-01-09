@@ -34,17 +34,31 @@ class NoteService {
             const data = response.data;
 
             // Validate response structure (basic check)
-            if (!data.title || !data.summary || !data.sections) {
+            // Validate response structure (basic check)
+            if (!data.title || !data.summary || (!data.sections && !data.units)) {
                 throw new AppError('Invalid response from processing service', 502);
             }
+
+            const transformSection = (s) => {
+                if (s.type === 'BULLET_LIST') return { ...s, type: 'LIST', content: { ...s.content, style: 'default' } };
+                if (s.type === 'MANTRAS') return { ...s, type: 'LIST', content: { ...s.content, style: 'mantra' } };
+                return s;
+            };
+
+            const units = data.units
+                ? data.units.map(u => ({ ...u, sections: u.sections.map(transformSection) }))
+                : [{
+                    title: 'General',
+                    sections: data.sections.map(transformSection)
+                }];
 
             const newNote = {
                 title: data.title,
                 summary: data.summary,
-                sections: data.sections,
+                units: units,
                 source: originalName,
                 sourceType: 'pdf',
-                userId: userId // Assuming userId is passed as ObjectId string or compatible
+                userId: userId
             };
 
             // Save to repository
@@ -102,14 +116,28 @@ class NoteService {
             const data = response.data;
 
             // Validate response structure
-            if (!data.title || !data.summary || !data.sections) {
+            // Validate response structure
+            if (!data.title || !data.summary || (!data.sections && !data.units)) {
                 throw new AppError('Invalid response from processing service', 502);
             }
+
+            const transformSection = (s) => {
+                if (s.type === 'BULLET_LIST') return { ...s, type: 'LIST', content: { ...s.content, style: 'default' } };
+                if (s.type === 'MANTRAS') return { ...s, type: 'LIST', content: { ...s.content, style: 'mantra' } };
+                return s;
+            };
+
+            const units = data.units
+                ? data.units.map(u => ({ ...u, sections: u.sections.map(transformSection) }))
+                : [{
+                    title: 'General',
+                    sections: data.sections.map(transformSection)
+                }];
 
             const newNote = {
                 title: data.title,
                 summary: data.summary,
-                sections: data.sections,
+                units: units,
                 source: link,
                 sourceType: 'youtube',
                 userId: userId
@@ -165,9 +193,52 @@ class NoteService {
             throw new NotFoundError(`Note with ID ${id} not found`);
         }
         let noteContent = `Title: ${note.title}\n\nSummary: ${note.summary}\n\n`;
-        if (note.sections && Array.isArray(note.sections)) {
-            note.sections.forEach(section => {
-                noteContent += `Section: ${section.subtitle}\n${section.content}\n\n`;
+
+        if (note.units && Array.isArray(note.units)) {
+            note.units.forEach(unit => {
+                if (unit.title) noteContent += `Unit: ${unit.title}\n\n`;
+
+                if (unit.sections && Array.isArray(unit.sections)) {
+                    unit.sections.forEach(section => {
+                        noteContent += `Section: ${section.subtitle || 'Untitled'}\n`;
+
+                        switch (section.type) {
+                            case 'TEXT':
+                                if (section.content.text) noteContent += `${section.content.text}\n`;
+                                if (section.content.highlights && section.content.highlights.length > 0) {
+                                    noteContent += `Highlights:\n- ${section.content.highlights.join('\n- ')}\n`;
+                                }
+                                break;
+                            case 'LIST':
+                                if (section.content.style === 'mantra') {
+                                    noteContent += `[Mantra]\n`;
+                                }
+                                if (section.content.items) {
+                                    noteContent += `- ${section.content.items.join('\n- ')}\n`;
+                                }
+                                break;
+                            case 'TABLE':
+                                if (section.content.title) noteContent += `Table: ${section.content.title}\n`;
+                                if (section.content.rows && Array.isArray(section.content.rows)) {
+                                    section.content.rows.forEach(row => {
+                                        // Handle Mongoose Map or POJO
+                                        const rowObj = (row instanceof Map) ? Object.fromEntries(row) : row;
+                                        noteContent += JSON.stringify(rowObj) + '\n';
+                                    });
+                                }
+                                break;
+                            case 'CODE':
+                                if (section.content.explanation) {
+                                    noteContent += `Explanation: ${section.content.explanation}\n`;
+                                }
+                                noteContent += `\`\`\`${section.content.language || ''}\n${section.content.code}\n\`\`\`\n`;
+                                break;
+                            default:
+                                noteContent += JSON.stringify(section.content) + '\n';
+                        }
+                        noteContent += '\n';
+                    });
+                }
             });
         }
         return noteContent;

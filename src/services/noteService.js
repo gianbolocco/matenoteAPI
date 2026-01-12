@@ -244,6 +244,69 @@ class NoteService {
         return noteContent;
     }
 
+    async createMindmap(noteId) {
+        const noteContent = await this.getNoteContentById(noteId);
+
+        try {
+            const webhookUrl = process.env.CREATE_MINDMAP_WEBHOOK_URL;
+            if (!webhookUrl) {
+                throw new AppError('CREATE_MINDMAP_WEBHOOK_URL is not defined', 500);
+            }
+
+            // Call the webhook with the note content
+            const response = await axios.post(webhookUrl, {
+                noteContent: noteContent
+            });
+
+            let mindmapData = response.data;
+
+            if (mindmapData && mindmapData.message === 'Workflow was started') {
+                throw new AppError('Webhook returned "Workflow was started". Please configure it to "Respond to Webhook" or "Wait for Completion".', 502);
+            }
+
+            // Handle case where response is a string (e.g. webhook returns text/plain)
+            if (typeof mindmapData === 'string') {
+                try {
+                    // Try to extract JSON from string if it's wrapped in code blocks or similar
+                    const match = mindmapData.match(/\[.*\]|\{.*\}/s);
+                    if (match) {
+                        mindmapData = JSON.parse(match[0]);
+                    } else {
+                        mindmapData = JSON.parse(mindmapData);
+                    }
+                } catch (e) {
+                    console.error('Failed to parse mindmap response:', mindmapData);
+                    // Keep original data or throw? For now let's keep original but it might be the issue
+                }
+            }
+
+            // Update the note with the received mindmap data
+            const updatedNote = await noteRepository.updateById(noteId, {
+                mindmap: mindmapData
+            });
+
+            if (!updatedNote) {
+                throw new NotFoundError(`Note with ID ${noteId} not found for update`);
+            }
+
+            return updatedNote.mindmap;
+
+        } catch (error) {
+            if (error instanceof AppError || error instanceof NotFoundError) {
+                throw error;
+            }
+
+            let errorMessage = error.message;
+            if (error.response) {
+                const remoteMsg = error.response.data ? (error.response.data.message || JSON.stringify(error.response.data)) : error.response.statusText;
+                errorMessage = `External mindmap service error ${error.response.status}: ${remoteMsg}`;
+                throw new AppError(errorMessage, 502);
+            }
+
+            throw new AppError(`Failed to create mindmap: ${errorMessage}`, 500);
+        }
+    }
+
 }
 
 module.exports = new NoteService();

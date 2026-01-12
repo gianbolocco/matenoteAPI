@@ -173,6 +173,10 @@ const noteSchema = new mongoose.Schema({
   units: {
     type: [unitSchema],
     default: []
+  },
+  mindmap: {
+    type: mongoose.Schema.Types.Mixed,
+    default: null
   }
 });
 

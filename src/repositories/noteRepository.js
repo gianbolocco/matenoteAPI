@@ -37,6 +37,10 @@ class NoteRepository {
     async deleteById(id) {
         return await Note.findByIdAndDelete(id);
     }
+
+    async updateById(id, updateData) {
+        return await Note.findByIdAndUpdate(id, updateData, { new: true });
+    }
 }
 
 module.exports = new NoteRepository();

@@ -77,10 +77,24 @@ const deleteNote = async (req, res, next) => {
     }
 };
 
+const createMindmap = async (req, res, next) => {
+    try {
+        const noteId = req.params.id;
+        const mindmap = await noteService.createMindmap(noteId);
+        res.status(201).json({
+            status: 'success',
+            data: { mindmap }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createNoteFromPdf,
     createNoteFromYoutube,
     getAllNotes,
     getNoteById,
-    deleteNote
+    deleteNote,
+    createMindmap
 };

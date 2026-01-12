@@ -33,4 +33,6 @@ router.delete('/:id', noteController.deleteNote);
 router.post('/:id/chat', chatController.chatWithNote)
 router.get('/:id/chat', chatController.getChatHistory)
 
+router.post('/:id/mindmap', noteController.createMindmap)
+
 module.exports = router;

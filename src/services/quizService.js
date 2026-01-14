@@ -5,15 +5,7 @@ const { ValidationError, NotFoundError } = require('../utils/customErrors');
 
 class QuizService {
     async createQuiz(data) {
-        const { noteId, quantity, difficulty } = data;
-
-        if (![5, 10, 15].includes(quantity)) {
-            throw new ValidationError('Quantity must be 5, 10, or 15');
-        }
-
-        if (![1, 2, 3].includes(difficulty)) {
-            throw new ValidationError('Difficulty must be 1, 2, or 3');
-        }
+        const { noteId } = data;
 
         // 1. Fetch Note
         let noteContent = await noteService.getNoteContentById(noteId);
@@ -23,8 +15,6 @@ class QuizService {
         try {
             const response = await axios.post(process.env.CREATE_QUIZ_WEBHOOK_URL, {
                 data: noteContent,
-                quantity: quantity,
-                difficulty: difficulty
             });
 
             const generatedQuestions = response.data.questions;
@@ -32,12 +22,14 @@ class QuizService {
             // 3. Save Quiz
             const quizData = {
                 noteId: noteId,
-                quantity: quantity,
-                difficulty: difficulty,
                 questions: generatedQuestions
             };
 
-            return await quizRepository.create(quizData);
+            const savedQuiz = await quizRepository.create(quizData);
+
+            await noteService.updateNote(noteId, { quizzId: savedQuiz._id });
+
+            return savedQuiz;
 
         } catch (error) {
             console.error('Error generating quiz:', error.message);

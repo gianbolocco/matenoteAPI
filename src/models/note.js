@@ -177,6 +177,16 @@ const noteSchema = new mongoose.Schema({
   mindmap: {
     type: mongoose.Schema.Types.Mixed,
     default: null
+  },
+  flashcardsId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Flashcard',
+    default: null
+  },
+  quizzId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Quizz',
+    default: null
   }
 });
 

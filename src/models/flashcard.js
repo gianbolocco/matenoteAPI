@@ -10,15 +10,6 @@ const flashcardSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Note',
         required: true
-    },
-    quantity: {
-        type: Number,
-        required: true
-    },
-    difficulty: {
-        type: Number,
-        enum: [1, 2, 3],
-        required: true
     }
 });
 

@@ -244,6 +244,7 @@ class NoteService {
         return noteContent;
     }
 
+
     async createMindmap(noteId) {
         const noteContent = await this.getNoteContentById(noteId);
 
@@ -307,6 +308,15 @@ class NoteService {
         }
     }
 
+
+    async updateNote(id, data) {
+        const updatedNote = await noteRepository.updateById(id, data);
+        if (!updatedNote) {
+            throw new NotFoundError(`Note with ID ${id} not found`);
+        }
+        return updatedNote;
+    }
 }
+
 
 module.exports = new NoteService();

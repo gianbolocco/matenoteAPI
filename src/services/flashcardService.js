@@ -5,35 +5,27 @@ const { ValidationError, NotFoundError } = require('../utils/customErrors');
 
 class FlashcardService {
     async createFlashcard(data) {
-        const { noteId, quantity, difficulty } = data;
-
-        if (![5, 10, 15].includes(quantity)) {
-            throw new ValidationError('Quantity must be 5, 10, or 15');
-        }
-
-        if (![1, 2, 3].includes(difficulty)) {
-            throw new ValidationError('Difficulty must be 1, 2, or 3');
-        }
+        const { noteId } = data;
 
         const noteContent = await noteService.getNoteContentById(noteId);
 
         try {
             const response = await axios.post(process.env.CREATE_FLASHCARD_WEBHOOK_URL, {
                 data: noteContent,
-                quantity: quantity,
-                difficulty: difficulty
             });
 
             const generatedFlashcards = response.data.flashcards;
 
             const flashcardData = {
                 noteId: noteId,
-                quantity: quantity,
-                difficulty: difficulty,
                 flashcards: generatedFlashcards
             };
 
-            return await flashcardRepository.create(flashcardData);
+            const savedFlashcard = await flashcardRepository.create(flashcardData);
+
+            await noteService.updateNote(noteId, { flashcardsId: savedFlashcard._id });
+
+            return savedFlashcard;
 
         } catch (error) {
             console.error('Error generating flashcards:', error.message);

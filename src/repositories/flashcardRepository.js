@@ -6,10 +6,6 @@ class FlashcardRepository {
         return await flashcard.save();
     }
 
-    async findByNoteId(noteId) {
-        return await Flashcard.find({ noteId: noteId });
-    }
-
     async findById(id) {
         return await Flashcard.findById(id);
     }

@@ -3,7 +3,6 @@ const router = express.Router();
 const quizController = require('../controllers/quizController');
 
 router.post('/', quizController.createQuiz);
-router.get('/note/:noteId', quizController.getQuizzesByNoteId);
 router.get('/:id', quizController.getQuizById);
 router.delete('/:id', quizController.deleteQuiz);
 

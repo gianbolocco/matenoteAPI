@@ -37,10 +37,6 @@ class QuizService {
         }
     }
 
-    async getQuizzesByNoteId(noteId) {
-        return await quizRepository.findByNoteId(noteId);
-    }
-
     async getQuizById(id) {
         const quiz = await quizRepository.findById(id);
         if (!quiz) {

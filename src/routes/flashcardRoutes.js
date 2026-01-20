@@ -3,7 +3,6 @@ const router = express.Router();
 const flashcardController = require('../controllers/flashcardController');
 
 router.post('/', flashcardController.createFlashcard);
-router.get('/note/:noteId', flashcardController.getFlashcardsByNoteId);
 router.get('/:id', flashcardController.getFlashcardById);
 router.delete('/:id', flashcardController.deleteFlashcard);
 

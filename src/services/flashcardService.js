@@ -33,10 +33,6 @@ class FlashcardService {
         }
     }
 
-    async getFlashcardsByNoteId(noteId) {
-        return await flashcardRepository.findByNoteId(noteId);
-    }
-
     async getFlashcardById(id) {
         const flashcard = await flashcardRepository.findById(id);
         if (!flashcard) {

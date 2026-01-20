@@ -12,18 +12,6 @@ const createQuiz = async (req, res, next) => {
     }
 };
 
-const getQuizzesByNoteId = async (req, res, next) => {
-    try {
-        const quizzes = await quizService.getQuizzesByNoteId(req.params.noteId);
-        res.status(200).json({
-            status: 'success',
-            results: quizzes.length,
-            data: { quizzes }
-        });
-    } catch (error) {
-        next(error);
-    }
-};
 
 const getQuizById = async (req, res, next) => {
     try {
@@ -51,7 +39,6 @@ const deleteQuiz = async (req, res, next) => {
 
 module.exports = {
     createQuiz,
-    getQuizzesByNoteId,
     getQuizById,
     deleteQuiz
 };

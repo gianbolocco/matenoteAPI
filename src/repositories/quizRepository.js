@@ -6,10 +6,6 @@ class QuizRepository {
         return await quiz.save();
     }
 
-    async findByNoteId(noteId) {
-        return await Quiz.find({ noteId: noteId });
-    }
-
     async findById(id) {
         return await Quiz.findById(id);
     }

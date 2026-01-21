@@ -24,8 +24,26 @@ const upload = multer({
     }
 });
 
+const audioFilter = (req, file, cb) => {
+    const allowedMimeTypes = ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/x-m4a', 'audio/ogg', 'audio/webm'];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Only audio files (mp3, wav, m4a, ogg, webm) are allowed!'), false);
+    }
+};
+
+const uploadAudio = multer({
+    storage: storage,
+    fileFilter: audioFilter,
+    limits: {
+        fileSize: 25 * 1024 * 1024 // 25MB limit for audio
+    }
+});
+
 router.post('/pdf', upload.single('pdf'), noteController.createNoteFromPdf);
 router.post('/youtube', noteController.createNoteFromYoutube);
+router.post('/audio', uploadAudio.single('file'), noteController.createNoteFromAudio);
 router.get('/', noteController.getAllNotes);
 router.get('/:id', noteController.getNoteById);
 router.delete('/:id', noteController.deleteNote);

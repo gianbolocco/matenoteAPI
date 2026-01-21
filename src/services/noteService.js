@@ -33,8 +33,6 @@ class NoteService {
 
             const data = response.data;
 
-            // Validate response structure (basic check)
-            // Validate response structure (basic check)
             if (!data.title || !data.summary || (!data.sections && !data.units)) {
                 throw new AppError('Invalid response from processing service', 502);
             }
@@ -166,6 +164,87 @@ class NoteService {
         }
     }
 
+
+    async createNoteFromAudio(file, userId) {
+        if (!file) {
+            throw new ValidationError('Audio file is required');
+        }
+        if (!userId) {
+            throw new ValidationError('User ID is required');
+        }
+
+        const fileBuffer = file.buffer;
+        const originalName = file.originalname;
+
+        try {
+
+            const formData = new FormData();
+            formData.append('file', fileBuffer, originalName);
+
+            const webhookUrl = process.env.CREATE_NOTE_FROM_AUDIO_WEBHOOK_URL;
+
+            const response = await axios.post(webhookUrl, formData, {
+                headers: {
+                    ...formData.getHeaders()
+                }
+            });
+
+            const data = response.data;
+
+
+
+
+
+            // Validate response structure
+            if (!data.title || !data.summary || (!data.sections && !data.units)) {
+                throw new AppError('Invalid response from processing service', 502);
+            }
+
+            const transformSection = (s) => {
+                if (s.type === 'BULLET_LIST') return { ...s, type: 'LIST', content: { ...s.content, style: 'default' } };
+                if (s.type === 'MANTRAS') return { ...s, type: 'LIST', content: { ...s.content, style: 'mantra' } };
+                return s;
+            };
+
+            const units = data.units
+                ? data.units.map(u => ({ ...u, sections: u.sections.map(transformSection) }))
+                : [{
+                    title: 'General',
+                    sections: data.sections.map(transformSection)
+                }];
+
+            const newNote = {
+                title: data.title,
+                summary: data.summary,
+                units: units,
+                source: file.originalname,
+                sourceType: 'audio',
+                userId: userId
+            };
+
+            // Save to repository
+            const savedNote = await noteRepository.create(newNote);
+            return savedNote;
+
+        } catch (error) {
+            if (error instanceof ValidationError || error instanceof AppError) {
+                throw error;
+            }
+
+            let errorMessage = error.message;
+            if (error.response) {
+                const remoteMsg = error.response.data ? (error.response.data.message || JSON.stringify(error.response.data)) : error.response.statusText;
+                errorMessage = `External service error ${error.response.status}: ${remoteMsg}`;
+                throw new AppError(errorMessage, 502);
+            } else if (error.request) {
+                errorMessage = 'No response received from external service';
+                throw new AppError(errorMessage, 504);
+            }
+
+            throw new AppError(`Failed to process audio note: ${errorMessage}`, 500);
+        }
+    }
+
     async getAllNotes(query) {
         return noteRepository.findAll(query);
     }
@@ -186,6 +265,7 @@ class NoteService {
 
         return noteRepository.deleteById(id);
     }
+
 
     async getNoteContentById(id) {
         const note = await noteRepository.findById(id);

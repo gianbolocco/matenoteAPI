@@ -8,7 +8,6 @@ const { ValidationError } = require('../utils/customErrors');
 
 const createNoteFromPdf = async (req, res, next) => {
     try {
-        // Delegate validation and processing to service
         const newNote = await noteService.createNoteFromPdf(req.file, req.body.userId);
 
         res.status(201).json({
@@ -24,6 +23,19 @@ const createNoteFromYoutube = async (req, res, next) => {
     try {
         const { link, userId } = req.body;
         const newNote = await noteService.createNoteFromYoutube(link, userId);
+
+        res.status(201).json({
+            status: 'success',
+            data: { note: newNote }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const createNoteFromAudio = async (req, res, next) => {
+    try {
+        const newNote = await noteService.createNoteFromAudio(req.file, req.body.userId);
 
         res.status(201).json({
             status: 'success',
@@ -93,6 +105,7 @@ const createMindmap = async (req, res, next) => {
 module.exports = {
     createNoteFromPdf,
     createNoteFromYoutube,
+    createNoteFromAudio,
     getAllNotes,
     getNoteById,
     deleteNote,

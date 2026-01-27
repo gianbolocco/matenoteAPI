@@ -8,7 +8,7 @@ const { ValidationError } = require('../utils/customErrors');
 
 const createNoteFromPdf = async (req, res, next) => {
     try {
-        const newNote = await noteService.createNoteFromPdf(req.file, req.body.userId);
+        const newNote = await noteService.createNoteFromPdf(req.file, req.body);
 
         res.status(201).json({
             status: 'success',
@@ -21,8 +21,7 @@ const createNoteFromPdf = async (req, res, next) => {
 
 const createNoteFromYoutube = async (req, res, next) => {
     try {
-        const { link, userId } = req.body;
-        const newNote = await noteService.createNoteFromYoutube(link, userId);
+        const newNote = await noteService.createNoteFromYoutube(req.body);
 
         res.status(201).json({
             status: 'success',
@@ -35,7 +34,7 @@ const createNoteFromYoutube = async (req, res, next) => {
 
 const createNoteFromAudio = async (req, res, next) => {
     try {
-        const newNote = await noteService.createNoteFromAudio(req.file, req.body.userId);
+        const newNote = await noteService.createNoteFromAudio(req.file, req.body);
 
         res.status(201).json({
             status: 'success',

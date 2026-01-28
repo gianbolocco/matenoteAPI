@@ -12,7 +12,8 @@ class NoteService {
 
         const formData = new FormData();
         formData.append('pdf', file.buffer, file.originalname);
-        if (interest) formData.append('interest', interest);
+        if (!interest) interest = 'no interest';
+        formData.append('interest', interest);
 
         return this._processNoteCreation(
             process.env.CREATE_NOTE_FROM_PDF_WEBHOOK_URL,
@@ -21,7 +22,8 @@ class NoteService {
             {
                 source: file.originalname,
                 sourceType: 'pdf',
-                userId
+                userId,
+                interest
             }
         );
     }
@@ -36,7 +38,8 @@ class NoteService {
 
         const videoId = videoIdMatch[1];
         const payload = { id: videoId };
-        if (interest) payload.interest = interest;
+        if (!interest) interest = 'no interest';
+        payload.interest = interest;
 
         return this._processNoteCreation(
             process.env.CREATE_NOTE_FROM_YOUTUBE_WEBHOOK_URL,
@@ -45,7 +48,8 @@ class NoteService {
             {
                 source: link,
                 sourceType: 'youtube',
-                userId
+                userId,
+                interest
             }
         );
     }
@@ -57,7 +61,8 @@ class NoteService {
 
         const formData = new FormData();
         formData.append('file', file.buffer, file.originalname);
-        if (interest) formData.append('interest', interest);
+        if (!interest) interest = 'no interest';
+        formData.append('interest', interest);
 
         return this._processNoteCreation(
             process.env.CREATE_NOTE_FROM_AUDIO_WEBHOOK_URL,
@@ -66,7 +71,8 @@ class NoteService {
             {
                 source: file.originalname,
                 sourceType: 'audio',
-                userId
+                userId,
+                interest
             }
         );
     }
@@ -99,7 +105,8 @@ class NoteService {
                 units: units,
                 source: noteInfo.source,
                 sourceType: noteInfo.sourceType,
-                userId: noteInfo.userId
+                userId: noteInfo.userId,
+                interest: noteInfo.interest
             };
 
             return await noteRepository.create(newNote);
@@ -265,7 +272,6 @@ class NoteService {
             throw new AppError(`Failed to create mindmap: ${errorMessage}`, 500);
         }
     }
-
 
     async updateNote(id, data) {
         const updatedNote = await noteRepository.updateById(id, data);

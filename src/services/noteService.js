@@ -6,7 +6,7 @@ const { AppError, ValidationError, NotFoundError } = require('../utils/customErr
 
 class NoteService {
     async createNoteFromPdf(file, body) {
-        const { userId, interest } = body;
+        let { userId, interest } = body;
         if (!file) throw new ValidationError('PDF file is required');
         if (!userId) throw new ValidationError('User ID is required');
 
@@ -29,7 +29,7 @@ class NoteService {
     }
 
     async createNoteFromYoutube(body) {
-        const { link, userId, interest } = body;
+        let { link, userId, interest } = body;
         if (!link) throw new ValidationError('YouTube link is required');
         if (!userId) throw new ValidationError('User ID is required');
 
@@ -55,7 +55,7 @@ class NoteService {
     }
 
     async createNoteFromAudio(file, body) {
-        const { userId, interest } = body;
+        let { userId, interest } = body;
         if (!file) throw new ValidationError('Audio file is required');
         if (!userId) throw new ValidationError('User ID is required');
 

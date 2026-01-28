@@ -46,6 +46,7 @@ router.post('/youtube', noteController.createNoteFromYoutube);
 router.post('/audio', uploadAudio.single('file'), noteController.createNoteFromAudio);
 router.get('/', noteController.getAllNotes);
 router.get('/:id', noteController.getNoteById);
+router.patch('/:id', noteController.updateNote);
 router.delete('/:id', noteController.deleteNote);
 
 router.post('/:id/chat', chatController.chatWithNote)

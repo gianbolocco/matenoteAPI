@@ -88,6 +88,18 @@ const deleteNote = async (req, res, next) => {
     }
 };
 
+const updateNote = async (req, res, next) => {
+    try {
+        const updatedNote = await noteService.updateNote(req.params.id, req.body);
+        res.status(200).json({
+            status: 'success',
+            data: { note: updatedNote }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const createMindmap = async (req, res, next) => {
     try {
         const noteId = req.params.id;
@@ -106,6 +118,7 @@ module.exports = {
     createNoteFromYoutube,
     createNoteFromAudio,
     getAllNotes,
+    updateNote,
     getNoteById,
     deleteNote,
     createMindmap

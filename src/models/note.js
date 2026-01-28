@@ -187,6 +187,10 @@ const noteSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Quizz',
     default: null
+  },
+  interest: {
+    type: String,
+    default: 'no interest'
   }
 });
 

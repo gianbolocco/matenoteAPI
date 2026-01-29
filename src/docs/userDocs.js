@@ -8,7 +8,6 @@
  *         - name
  *         - email
  *         - password
- *         - lastName
  *       properties:
  *         id:
  *           type: string
@@ -16,24 +15,58 @@
  *         name:
  *           type: string
  *           description: The user name
+ *         lastName:
+ *            type: string
+ *            description: The user last name
  *         email:
  *           type: string
  *           description: The user email
  *         password:
  *           type: string
  *           description: The user password
- *         phoneNumber:
+ *         avatar:
  *           type: string
- *           description: The user phone number
- *         lastName:
- *            type: string
- *            description: The user last name
+ *           description: URL to user avatar
+ *         plan:
+ *           type: string
+ *           enum: [Free, Premium]
+ *           default: Free
+ *           description: User subscription plan
+ *         streak:
+ *           type: object
+ *           properties:
+ *             current:
+ *               type: integer
+ *               description: Current streak count
+ *             longest:
+ *               type: integer
+ *               description: Valid streak count
+ *             lastActivityDate:
+ *               type: string
+ *               format: date-time
+ *               description: Last activity date
+ *         interests:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: User interests
+ *         country:
+ *           type: string
+ *         occupation:
+ *           type: string
+ *         age:
+ *           type: integer
+ *         usagePurpose:
+ *           type: string
  *       example:
  *         name: John
+ *         lastName: Doe
  *         email: john@example.com
  *         password: password123
- *         phoneNumber: 123456789
- *         lastName: Doe
+ *         plan: Free
+ *         streak:
+ *           current: 5
+ *           longest: 10
  */
 
 /**
@@ -105,6 +138,40 @@
  *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Validation error
+ */
+
+/**
+ * @swagger
+ * /users/{id}/streak:
+ *   post:
+ *     summary: Update user streak
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *     responses:
+ *       200:
+ *         description: Streak updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 streak:
+ *                   type: object
+ *                   properties:
+ *                     current:
+ *                       type: integer
+ *                     longest:
+ *                       type: integer
+ *       404:
+ *         description: User not found
  */
 
 /**

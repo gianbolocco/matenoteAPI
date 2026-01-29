@@ -112,16 +112,6 @@ class NoteService {
 
             const createdNote = await noteRepository.create(newNote);
 
-            // Update user streak
-            if (noteInfo.userId) {
-                try {
-                    await userService.updateStreak(noteInfo.userId);
-                } catch (streakError) {
-                    console.error('Failed to update streak:', streakError.message);
-                    // Don't fail the note creation if streak update fails
-                }
-            }
-
             return createdNote;
 
         } catch (error) {

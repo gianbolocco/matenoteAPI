@@ -38,10 +38,22 @@
  *           description: Source filename or URL
  *         sourceType:
  *           type: string
- *           description: Type of source (e.g., pdf, youtube)
+ *           description: Type of source (e.g., pdf, youtube, audio)
  *         userId:
  *           type: string
  *           description: ID of the user who created the note
+ *         interest:
+ *           type: string
+ *           description: User interest field
+ *         mindmap:
+ *           type: object
+ *           description: Mindmap data
+ *         flashcardsId:
+ *           type: string
+ *           description: ID of associated flashcards
+ *         quizzId:
+ *           type: string
+ *           description: ID of associated quiz
  */
 
 /**
@@ -71,6 +83,8 @@
  *               userId:
  *                 type: string
  *                 description: ID of the user creating the note
+ *               interest:
+ *                 type: string
  *     responses:
  *       201:
  *         description: The note was successfully created
@@ -115,6 +129,52 @@
  *               userId:
  *                 type: string
  *                 description: ID of the user creating the note
+ *               interest:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: The note was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     note:
+ *                       $ref: '#/components/schemas/Note'
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /notes/audio:
+ *   post:
+ *     summary: Create a new note from Audio file
+ *     tags: [Notes]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Audio file to upload
+ *               userId:
+ *                 type: string
+ *                 description: ID of the user creating the note
+ *               interest:
+ *                 type: string
  *     responses:
  *       201:
  *         description: The note was successfully created
@@ -170,8 +230,8 @@
  *         name: sourceType
  *         schema:
  *           type: string
- *           enum: [pdf, youtube]
- *         description: Filter by source type (pdf, youtube)
+ *           enum: [pdf, youtube, audio]
+ *         description: Filter by source type (pdf, youtube, audio)
  *     responses:
  *       200:
  *         description: List of all notes
@@ -225,6 +285,40 @@
  *                       $ref: '#/components/schemas/Note'
  *       404:
  *         description: The note was not found
+ *   patch:
+ *     summary: Update a note by ID
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The note ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Note'
+ *     responses:
+ *       200:
+ *         description: The note was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     note:
+ *                       $ref: '#/components/schemas/Note'
+ *       404:
+ *         description: The note was not found
  *   delete:
  *     summary: Remove the note by ID
  *     tags: [Notes]
@@ -240,4 +334,35 @@
  *         description: The note was deleted
  *       404:
  *         description: The note was not found
+ */
+
+/**
+ * @swagger
+ * /notes/{id}/mindmap:
+ *   post:
+ *     summary: Create mindmap for a note
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The note ID
+ *     responses:
+ *       201:
+ *         description: Mindmap created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     mindmap:
+ *                        type: object
  */

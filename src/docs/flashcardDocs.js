@@ -82,41 +82,6 @@
 
 /**
  * @swagger
- * /flashcards/note/{noteId}:
- *   get:
- *     summary: Get flashcards by Note ID
- *     tags: [Flashcards]
- *     parameters:
- *       - in: path
- *         name: noteId
- *         schema:
- *           type: string
- *         required: true
- *         description: The Note ID
- *     responses:
- *       200:
- *         description: List of flashcards for the note
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 results:
- *                   type: integer
- *                 data:
- *                   type: object
- *                   properties:
- *                     flashcards:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/Flashcard'
- */
-
-/**
- * @swagger
  * /flashcards/{id}:
  *   get:
  *     summary: Get a flashcard set by ID

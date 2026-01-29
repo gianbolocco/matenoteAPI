@@ -91,41 +91,6 @@
 
 /**
  * @swagger
- * /quizzes/note/{noteId}:
- *   get:
- *     summary: Get quizzes by Note ID
- *     tags: [Quizzes]
- *     parameters:
- *       - in: path
- *         name: noteId
- *         schema:
- *           type: string
- *         required: true
- *         description: The Note ID
- *     responses:
- *       200:
- *         description: List of quizzes for the note
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 results:
- *                   type: integer
- *                 data:
- *                   type: object
- *                   properties:
- *                     quizzes:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/Quiz'
- */
-
-/**
- * @swagger
  * /quizzes/{id}:
  *   get:
  *     summary: Get a quiz by ID

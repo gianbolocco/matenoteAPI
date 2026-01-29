@@ -1,7 +1,8 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const noteRepository = require('../repositories/noteRepository');
-const { AppError, ValidationError, NotFoundError } = require('../utils/customErrors'); // Assuming these exist, checked CustomErrors.js availability in previous steps
+const { AppError, ValidationError, NotFoundError } = require('../utils/customErrors');
+const userService = require('./userService');
 
 
 class NoteService {
@@ -109,7 +110,19 @@ class NoteService {
                 interest: noteInfo.interest
             };
 
-            return await noteRepository.create(newNote);
+            const createdNote = await noteRepository.create(newNote);
+
+            // Update user streak
+            if (noteInfo.userId) {
+                try {
+                    await userService.updateStreak(noteInfo.userId);
+                } catch (streakError) {
+                    console.error('Failed to update streak:', streakError.message);
+                    // Don't fail the note creation if streak update fails
+                }
+            }
+
+            return createdNote;
 
         } catch (error) {
             if (error instanceof ValidationError || error instanceof AppError) {

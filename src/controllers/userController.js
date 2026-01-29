@@ -61,10 +61,24 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+const updateStreak = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        await userService.updateStreak(userId);
+        res.status(200).json({
+            status: 'success',
+            message: 'Streak updated successfully'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAllUsers,
     getUserById,
     createUser,
     updateUser,
     deleteUser,
+    updateStreak
 };

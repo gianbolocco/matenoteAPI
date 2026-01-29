@@ -64,10 +64,14 @@ const deleteUser = async (req, res, next) => {
 const updateStreak = async (req, res, next) => {
     try {
         const userId = req.params.id;
-        await userService.updateStreak(userId);
+        const result = await userService.updateStreak(userId);
+
         res.status(200).json({
             status: 'success',
-            message: 'Streak updated successfully'
+            data: {
+                streakUpdated: !result.status.alreadyCompletedToday,
+                ...result.status
+            }
         });
     } catch (error) {
         next(error);

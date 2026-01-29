@@ -30,6 +30,19 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    streak: {
+        current: {
+            type: Number,
+            default: 0
+        },
+        longest: {
+            type: Number,
+            default: 0
+        },
+        lastActivityDate: {
+            type: Date
+        }
+    },
     interests: {
         type: [String],
         required: false

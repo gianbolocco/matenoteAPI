@@ -159,7 +159,7 @@ const noteSchema = new mongoose.Schema({
   sourceType: {
     type: String,
     required: true,
-    enum: ['pdf', 'youtube', 'audio']
+    enum: ['pdf', 'youtube', 'audio', 'text']
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

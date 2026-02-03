@@ -32,6 +32,19 @@ const createNoteFromYoutube = async (req, res, next) => {
     }
 };
 
+const createNoteFromText = async (req, res, next) => {
+    try {
+        const newNote = await noteService.createNoteFromText(req.body);
+
+        res.status(201).json({
+            status: 'success',
+            data: { note: newNote }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const createNoteFromAudio = async (req, res, next) => {
     try {
         const newNote = await noteService.createNoteFromAudio(req.file, req.body);
@@ -117,6 +130,7 @@ module.exports = {
     createNoteFromPdf,
     createNoteFromYoutube,
     createNoteFromAudio,
+    createNoteFromText,
     getAllNotes,
     updateNote,
     getNoteById,

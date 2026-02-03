@@ -44,6 +44,7 @@ const uploadAudio = multer({
 router.post('/pdf', upload.single('pdf'), noteController.createNoteFromPdf);
 router.post('/youtube', noteController.createNoteFromYoutube);
 router.post('/audio', uploadAudio.single('file'), noteController.createNoteFromAudio);
+router.post("/text", noteController.createNoteFromText);
 router.get('/', noteController.getAllNotes);
 router.get('/:id', noteController.getNoteById);
 router.patch('/:id', noteController.updateNote);

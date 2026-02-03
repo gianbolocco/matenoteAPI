@@ -78,6 +78,28 @@ class NoteService {
         );
     }
 
+    async createNoteFromText(body) {
+        let { text, userId, interest } = body;
+        if (!text) throw new ValidationError('Text is required');
+        if (!userId) throw new ValidationError('User ID is required');
+
+        const payload = { text };
+        if (!interest) interest = 'no interest';
+        payload.interest = interest;
+
+        return this._processNoteCreation(
+            process.env.CREATE_NOTE_FROM_TEXT_WEBHOOK_URL,
+            payload,
+            {},
+            {
+                source: 'text',
+                sourceType: 'text',
+                userId,
+                interest
+            }
+        );
+    }
+
     async _processNoteCreation(webhookUrl, payload, headers, noteInfo) {
         try {
             const response = await axios.post(webhookUrl, payload, { headers });

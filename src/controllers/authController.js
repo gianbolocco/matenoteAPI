@@ -1,4 +1,5 @@
 const { AuthService } = require("../services/authService.js");
+const streakService = require("../services/streakService.js");
 
 const googleCallback = async (req, res, next) => {
     try {
@@ -18,10 +19,18 @@ const googleCallback = async (req, res, next) => {
     }
 };
 
-const getSession = (req, res) => {
-    res.json({
-        user: req.user,
-    });
+const getSession = async (req, res, next) => {
+    try {
+        if (req.user) {
+            // The checkStreakStatus method updates the DB if needed and returns the user object
+            req.user = await streakService.checkStreakStatus(req.user);
+        }
+        res.json({
+            user: req.user,
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const logout = (req, res, next) => {

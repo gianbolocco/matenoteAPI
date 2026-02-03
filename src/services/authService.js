@@ -13,7 +13,7 @@ class AuthService {
                 email,
                 name,
                 avatar: profile.photos[0].value,
-                lastName: profile.name?.familyName || 'Unknown', // Handle lastName requirement if needed
+                lastName: profile.name?.familyName || 'Unknown',
                 provider: "google",
                 plan: "Free",
             });
